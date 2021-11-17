@@ -1,21 +1,71 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
+import ProfileView from './src/screens/profile'
+import HomeView from './src/screens/home'
+import CartView from './src/screens/cart'
+import Product from './src/screens/product'
+import OrderHistory from './src/screens/order-history'
+import Login from './src/screens/login'
+import SignUp from './src/screens/register'
+import Category from './src/screens/category'
+import Promotion from './src/screens/promotion'
+import Checkout from './src/screens/checkout'
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+const BottomTabs = createBottomTabNavigator(
+  {
+    Home: {
+      screen: HomeView,
+      path: '',
+    },
+    Cart: {
+      screen: CartView,
+      path: 'cart',
+    },
+    Profile: {
+      screen: ProfileView,
+      path: 'profile',
+    },
+  },
+  {
+    tabBarOptions: {
+      activeTintColor: '#ff2e63',
+    },
+  }
+)
+
+class DefaultScreen extends React.Component {
+  static router = BottomTabs.router
+  static navigationOptions = {
+    title: 'Home',
+    headerStyle: {
+      display: 'none',
+    },
+  }
+  render() {
+    return (
+      <BottomTabs navigation={this.props.navigation} />
+    )
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const RootStack = createStackNavigator(
+  {
+    Home: DefaultScreen,
+    Product,
+    OrderHistory,
+    Login,
+    SignUp,
+    Category,
+    Promotion,
+    Checkout,
   },
-});
+  {
+    initialRouteName: 'Home',
+  }
+)
+
+export default class App extends React.Component {
+  render() {
+    return <RootStack />
+  }
+}
